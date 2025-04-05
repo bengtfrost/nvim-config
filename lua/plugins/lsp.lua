@@ -9,10 +9,12 @@ return {
         'williamboman/mason.nvim',
         config = function()
           require('mason').setup({
+            -- *** List ALL servers to be managed by Mason ***
             ensure_installed = {
-              'typescript-language-server',
-              'lua_ls',
-              -- Add other Mason-managed servers here
+              'typescript-language-server', -- For TypeScript/JavaScript
+              'lua_ls',                   -- For Lua
+              'pyright',                  -- For Python (will be installed/managed by Mason)
+              -- Add any other LSPs, formatters, linters you want Mason to manage
             },
           })
         end,
@@ -31,11 +33,12 @@ return {
 
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
+      -- Define the on_attach function once to reuse it for all servers
       local on_attach = function(client, bufnr)
         local map = vim.keymap.set
         local opts = { buffer = bufnr, noremap = true, silent = true }
 
-        -- LSP Keymaps (No changes needed here)
+        -- LSP Keymaps (Apply to all attached LSPs)
         map('n', 'gD', vim.lsp.buf.declaration, vim.tbl_extend('force', opts, { desc = '[G]oto [D]eclaration' }))
         map('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend('force', opts, { desc = '[G]oto [D]efinition' }))
         map('n', 'K', vim.lsp.buf.hover, vim.tbl_extend('force', opts, { desc = 'Hover Documentation' }))
@@ -53,86 +56,65 @@ return {
         map('n', '[d', vim.diagnostic.goto_prev, vim.tbl_extend('force', opts, { desc = 'Previous Diagnostic' }))
         map('n', ']d', vim.diagnostic.goto_next, vim.tbl_extend('force', opts, { desc = 'Next Diagnostic' }))
         map('n', '<leader>dq', vim.diagnostic.setloclist, vim.tbl_extend('force', opts, { desc = 'Diagnostics Quickfix List' }))
-
-        -- Comment out the attach message if desired
-        -- print("LSP attached to buffer " .. bufnr .. ": " .. client.name)
       end
 
-      -- Mason-lspconfig setup (No changes needed here)
-      mason_lspconfig.setup({})
+      -- Configure mason-lspconfig to use the default handler for all servers
+      mason_lspconfig.setup({
+          -- The list of servers installed by Mason (`ensure_installed` in mason.setup)
+          -- will be automatically configured by the handlers below.
+      })
+
       mason_lspconfig.setup_handlers({
-        function(server_name) -- Default handler for Mason-installed servers
+        -- Default handler: This will set up pyright, typescript-language-server (tsserver),
+        -- using the common capabilities and on_attach function.
+        -- It will skip lua_ls because a specific handler exists below.
+        function(server_name)
           lspconfig[server_name].setup({
             capabilities = capabilities,
             on_attach = on_attach,
+            -- NOTE: Pyright, when managed by Mason, should automatically detect
+            -- project-specific virtual environments in most standard setups.
+            -- Explicit pythonPath/venvPath settings are usually not needed here.
+          })
+        end,
+
+        -- Keep the explicit setup for lua_ls because it requires specific
+        -- settings for the Neovim runtime environment.
+        ["lua_ls"] = function()
+          lspconfig.lua_ls.setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            root_dir = util.root_pattern("init.lua", ".git"),
+            settings = {
+              Lua = {
+                runtime = { version = 'Neovim' },
+                workspace = {
+                  library = { vim.fn.expand('$VIMRUNTIME/lua'), vim.fn.stdpath('config') .. '/lua' },
+                  checkThirdParty = false,
+                },
+                diagnostics = { globals = { 'vim', 'require' } },
+                telemetry = { enable = false },
+                hint = { enable = true },
+              },
+            },
           })
         end,
       })
 
-      -- Explicit setup for MANUALLY installed Pyright (No changes needed here)
-      local pyright_path = "/home/febf/Utveckling/Python/venv/venv_py3.12/lsp_pynvim/bin/pyright-langserver"
-      local python_executable = "/home/febf/Utveckling/Python/venv/venv_py3.12/lsp_pynvim/bin/python"
-      local venv_directory = "/home/febf/Utveckling/Python/venv/venv_py3.12/lsp_pynvim"
+      --[[ *** REMOVED THE MANUAL PYRIGHT SETUP BLOCK ***
+      -- The setup for pyright is now handled automatically by the
+      -- default mason_lspconfig handler above because 'pyright'
+      -- is listed in the ensure_installed table for mason.nvim.
+
+      local pyright_path = "..."
       if vim.fn.executable(pyright_path) == 1 then
          lspconfig.pyright.setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            cmd = { pyright_path, "--stdio" },
-            settings = {
-               python = {
-                  analysis = {
-                     autoSearchPaths = true,
-                     diagnosticMode = "workspace",
-                     useLibraryCodeForTypes = true,
-                     -- Provide pythonPath and venvPath for clarity, even if auto works
-                     pythonPath = python_executable,
-                     venvPath = venv_directory,
-                  }
-               }
-            }
+             -- ... removed ...
          })
       else
-          vim.notify("Pyright executable not found at: " .. pyright_path, vim.log.levels.WARN)
+          -- ... removed ...
       end
-
-      -- Setup for lua_ls with necessary adjustments
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        root_dir = util.root_pattern("init.lua", ".git"), -- Keep this root detection
-        -- *** UPDATED/VERIFIED settings for lua_ls ***
-        settings = {
-          Lua = {
-            -- Tell lua_ls about the Neovim runtime environment
-            runtime = {
-              version = 'Neovim', -- REQUIRED to understand vim.* APIs
-            },
-            -- Help lua_ls find files in Neovim's stdpath and your config
-            workspace = {
-              library = {
-                -- Add Neovim's runtime path for standard modules
-                vim.fn.expand('$VIMRUNTIME/lua'),
-                -- Add your specific configuration path
-                vim.fn.stdpath('config') .. '/lua',
-              },
-              -- Improve performance for large workspaces if needed
-              -- maxPreload = 10000,
-              -- preloadFileSize = 10000,
-              -- Often useful for Neovim configs to avoid checking system libs too much
-              checkThirdParty = false,
-            },
-            -- Define known global variables
-            diagnostics = {
-              globals = { 'vim', 'require' }, -- Ensure 'vim' is listed, 'require' is common
-              -- disable = { "lowercase-global" } -- Optional: disable specific warnings if needed
-            },
-            -- Other useful settings
-            telemetry = { enable = false },
-            hint = { enable = true },
-          },
-        },
-        -- ****************************************
-      })
+      ]]
 
     end, -- End of main config function
   },
