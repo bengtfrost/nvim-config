@@ -1,0 +1,46 @@
+# Lazy.nvim generated files
+lazy-lock.json
+
+# Compiled Lua sources
+luac.out
+
+# Neovim temporary files
+*~
+*.swp
+*.swo
+
+# Plugin directories
+plugin/packer_compiled.lua
+
+# LSP data
+.luarc.json
+
+# Log files
+*.log
+
+# Cache directories
+.cache/
+.metals/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Session files
+Session.vim
+Sessionx.vim
+
+# Undo directory
+undodir/
+
+# Telescope history
+.telescope_history
+
+# Local configuration files that might contain sensitive information
+.env
+.envrc
