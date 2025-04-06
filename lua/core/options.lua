@@ -16,9 +16,9 @@ opt.background = 'dark'   -- Use a dark background
 opt.syntax = 'on'         -- Enable syntax highlighting
 
 -- [[ Tabs and Indentation ]]
-opt.tabstop = 4           -- Number of visual spaces per TAB
-opt.softtabstop = 4       -- Number of spaces TAB counts for while editing
-opt.shiftwidth = 4        -- Size of an indent
+opt.tabstop = 2           -- Number of visual spaces per TAB
+opt.softtabstop = 2       -- Number of spaces TAB counts for while editing
+opt.shiftwidth = 2        -- Size of an indent
 opt.expandtab = true      -- Use spaces instead of tabs
 opt.autoindent = true     -- Copy indent from current line when starting new line
 opt.smartindent = true    -- Makes indenting smart
@@ -44,7 +44,7 @@ opt.undodir = undodir
 -- [[ Performance / Behavior ]]
 opt.hidden = true         -- Allow hidden buffers
 opt.shortmess:append('I') -- Disable startup message (keep your original)
-opt.updatetime = 300      -- Faster completion triggering (default is 4000ms)
+opt.updatetime = 250      -- Faster completion triggering (default is 4000ms)
 opt.timeoutlen = 500      -- Time to wait for a mapped sequence to complete (in ms)
 opt.completeopt = 'menuone,noselect' -- Completion options
 

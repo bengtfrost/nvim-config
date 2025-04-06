@@ -5,10 +5,10 @@ local opts = { noremap = true, silent = true }
 
 -- [[ Navigation ]]
 -- Move between windows
-map('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
-map('n', '<C-j>', '<C-w>j', { desc = 'Move to below window' })
-map('n', '<C-k>', '<C-w>k', { desc = 'Move to above window' })
-map('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+map('n', '<C-h>', '<C-w>h', { desc = 'Navigate Left Window' })
+map('n', '<C-j>', '<C-w>j', { desc = 'Navigate Down Window' })
+map('n', '<C-k>', '<C-w>k', { desc = 'Navigate Up Window' })
+map('n', '<C-l>', '<C-w>l', { desc = 'Navigate Right Window' })
 
 -- Resize windows
 map('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase window height' })
@@ -32,7 +32,7 @@ map('v', 'p', '"_dP', { desc = 'Paste without losing yank buffer (visual)'})
 
 -- [[ Buffers / Files / Session ]]
 map('n', '<leader>s', '<cmd>w<cr>', vim.tbl_extend('force', opts, { desc = 'Save file' }))
-map('n', '<leader>q', '<cmd>q<cr>', vim.tbl_extend('force', opts, { desc = 'Quit window' }))
+map('n', '<leader>q', '<cmd>q<cr>', vim.tbl_extend('force', opts, { desc = 'Quit Window' }))
 map('n', '<leader>Q', '<cmd>qa!<cr>', vim.tbl_extend('force', opts, { desc = 'Quit All (Force)' }))
 map('n', '<leader>bn', '<cmd>bnext<cr>', vim.tbl_extend('force', opts, { desc = 'Next buffer' }))
 map('n', '<leader>bp', '<cmd>bprevious<cr>', vim.tbl_extend('force', opts, { desc = 'Previous buffer' }))
@@ -50,3 +50,12 @@ map('n', '<leader><leader>h', '<cmd>nohlsearch<cr>', vim.tbl_extend('force', opt
 
 -- Comment Toggle (Requires comment plugin, will be defined there)
 -- map({ 'n', 'v' }, '<leader>gc', -- Action defined in comment plugin config --, { desc = 'Toggle comment' })
+
+-- Add the mapping previously handled by which-key register
+-- which-key should pick this up automatically
+map('n', '<leader>fw', '<cmd>w<cr>', { desc = 'Save File (WhichKey)' }) -- Added description for clarity
+
+-- Terminal (Example)
+-- map('n', '<leader>tt', '<cmd>toggleterm<cr>', { desc = 'Toggle Terminal' })
+
+-- print("Core keymaps loaded!") -- Commented out

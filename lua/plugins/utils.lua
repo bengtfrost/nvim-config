@@ -1,29 +1,51 @@
--- lua/plugins/utils.lua (Minimal Working Version)
+-- lua/plugins/utils.lua (Refined for Normal Use)
 return {
   {
     'folke/which-key.nvim',
-    -- Load eagerly during this stable phase (you can change back to lazy later)
-    lazy = false,
+    -- Revert to VeryLazy loading
+    event = "VeryLazy",
+    dependencies = { 'echasnovski/mini.icons' }, -- Add dependency if icons are used
     config = function()
-      -- Keep debug prints temporarily to confirm loading
-      -- print("WhichKey: Attempting minimal setup...")
+      -- print("WhichKey: Attempting setup...") -- Keep commented
       local wk_ok, wk = pcall(require, "which-key")
       if not wk_ok then
-        -- print("WhichKey: FAILED TO REQUIRE!")
+        vim.notify("Failed to load which-key", vim.log.levels.ERROR)
         return
       end
 
-      -- Use an absolutely minimal setup table (empty)
-      local setup_ok, err = pcall(wk.setup, {}) -- Pass an empty table
+      local setup_ok, err = pcall(wk.setup, {
+        plugins = {
+          marks = true,
+          registers = true,
+          spelling = { enabled = true, suggestions = 20 },
+        },
+        icons = {
+          breadcrumb = "»", separator = "➜", group = "+",
+        },
+        win = {
+          border = "rounded",
+          -- position = "bottom", -- Commented out as it caused issues
+          -- margin = { 1, 0, 1, 0 }, -- Commented out as it caused issues
+          padding = { 1, 2, 1, 2 }, -- This seemed okay
+          -- winblend = 0, -- Commented out as it caused issues
+        },
+        layout = {
+          height = { min = 4, max = 25 },
+          width = { min = 20, max = 50 }, -- Fixed typo width = 50 -> width = { min = 20, max = 50 }
+          spacing = 3,
+          align = "left",
+        },
+        -- triggers = { "<leader>" }, -- Removed explicit trigger, use default "auto"
+      })
+
       if not setup_ok then
-        -- print("WhichKey: MINIMAL SETUP FAILED! Error: " .. tostring(err))
+        vim.notify("Failed to setup which-key: " .. tostring(err), vim.log.levels.ERROR)
       else
-        -- print("WhichKey: Minimal setup completed successfully.")
+        -- print("WhichKey: Setup completed.") -- Keep commented
       end
     end,
   },
 
-  -- Keep mini.icons listed as it might be needed by other plugins eventually
   {
     'echasnovski/mini.icons',
     lazy = true,
