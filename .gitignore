@@ -10,7 +10,7 @@ luac.out
 *.swo
 
 # Plugin directories
-plugin/packer_compiled.lua
+# plugin/packer_compiled.lua
 
 # LSP data
 .luarc.json
