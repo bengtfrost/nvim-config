@@ -23,10 +23,10 @@ This repository contains my personal Neovim configuration files, built with Lua 
 ## 📸 Screenshots
 
 *(NvimTree View)*
-![NvimTree Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/main/assets/nvim-treeview.png)
+![NvimTree Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/master/assets/nvim-treeview.png)
 
 *(Telescope FZF View)*
-![Telescope Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/main/assets/nvim-telescope.png)
+![Telescope Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/master/assets/nvim-telescope.png)
 
 ## 💾 Installation
 
@@ -68,11 +68,11 @@ This repository contains my personal Neovim configuration files, built with Lua 
 This configuration follows a modular structure:
 
 *   **`init.lua`**: The main entry point. Sets leader key, loads core modules, bootstraps `lazy.nvim`, sets global diagnostics config & autocommands.
+*   **`assets/`**: Directory for static assets like images.
 *   **`lua/core/`**: Contains base Neovim settings.
     *   `options.lua`: Core editor settings (`vim.opt`).
     *   `keymaps.lua`: Global, non-plugin keybindings (`vim.keymap.set`).
 *   **`lua/plugins/`**: Contains configurations for plugins managed by `lazy.nvim`. Each `.lua` file defines one or more related plugins.
-    *   `assets/`: Directory for static assets like images. *(Added this line)*
     *   `colorscheme.lua`: Theme setup (`nightfox.nvim`).
     *   `comment.lua`: Commenting (`Comment.nvim`).
     *   `completion.lua`: Completion engine (`nvim-cmp`, `LuaSnip`).
