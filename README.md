@@ -25,6 +25,9 @@ This repository contains my personal Neovim configuration files, built with Lua 
 *(NvimTree View)*
 ![NvimTree Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/master/assets/nvim-treeview.png)
 
+*(NvimTree View with Aider AI pair programming in your terminal)*
+![NvimTree Example with Aider](https://raw.githubusercontent.com/bengtfrost/nvim-config/master/assets/nvim-treeview_aider-chat.png)
+
 *(Telescope FZF View)*
 ![Telescope Example](https://raw.githubusercontent.com/bengtfrost/nvim-config/master/assets/nvim-telescope.png)
 
