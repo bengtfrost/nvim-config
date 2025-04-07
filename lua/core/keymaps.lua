@@ -36,26 +36,13 @@ map('n', '<leader>q', '<cmd>q<cr>', vim.tbl_extend('force', opts, { desc = 'Quit
 map('n', '<leader>Q', '<cmd>qa!<cr>', vim.tbl_extend('force', opts, { desc = 'Quit All (Force)' }))
 map('n', '<leader>bn', '<cmd>bnext<cr>', vim.tbl_extend('force', opts, { desc = 'Next buffer' }))
 map('n', '<leader>bp', '<cmd>bprevious<cr>', vim.tbl_extend('force', opts, { desc = 'Previous buffer' }))
-map('n', '<leader>bd', '<cmd>Bdelete<cr>', vim.tbl_extend('force', opts, { desc = 'Delete buffer' })) -- Requires :Bdelete command, often from fzf.vim or similar, or use <cmd>bdelete<cr>
+-- Note: :Bdelete usually requires a plugin like bufferline or fzf integrations
+-- Use <cmd>bdelete<cr> for standard Neovim buffer delete
+map('n', '<leader>bd', '<cmd>bdelete<cr>', vim.tbl_extend('force', opts, { desc = 'Delete buffer' }))
 
 -- [[ Other ]]
 -- Clear search highlights
-map('n', '<leader><leader>h', '<cmd>nohlsearch<cr>', vim.tbl_extend('force', opts, { desc = 'Clear highlights' }))
+map('n', '<leader><leader>h', '<cmd>nohlsearch<CR>', vim.tbl_extend('force', opts, { desc = 'Clear highlights' }))
 
--- Terminal (Optional, consider toggleterm.nvim plugin)
--- map('n', '<leader>t', '<cmd>ToggleTerm<CR>', { desc = 'Toggle terminal' })
-
--- NvimTree Toggle (This will be handled by the plugin config later, but good to have a central place to see it)
--- map('n', '<leader>n', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file tree' })
-
--- Comment Toggle (Requires comment plugin, will be defined there)
--- map({ 'n', 'v' }, '<leader>gc', -- Action defined in comment plugin config --, { desc = 'Toggle comment' })
-
--- Add the mapping previously handled by which-key register
--- which-key should pick this up automatically
-map('n', '<leader>fw', '<cmd>w<cr>', { desc = 'Save File (WhichKey)' }) -- Added description for clarity
-
--- Terminal (Example)
--- map('n', '<leader>tt', '<cmd>toggleterm<cr>', { desc = 'Toggle Terminal' })
-
--- print("Core keymaps loaded!") -- Commented out
+-- REMOVED redundant mapping: <leader>fw was same as <leader>s
+-- map('n', '<leader>fw', '<cmd>w<cr>', { desc = 'Save File (WhichKey)' })

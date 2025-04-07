@@ -1,35 +1,38 @@
 -- lua/plugins/comment.lua
 return {
   'numToStr/Comment.nvim',
-  -- Pass options directly to setup if using opts = {} isn't needed,
-  -- OR keep using opts and merge them in config
-  config = function(_, opts) -- Assuming you might still use opts = {} someday
+  -- opts = {}, -- Add plugin options here if needed later
+  config = function(_, opts)
     require('Comment').setup(vim.tbl_deep_extend('force', {
-      -- Add plugin options here
+      -- Add plugin options here if needed
       -- For example: disable padding
       -- padding = false,
 
-      -- *** ADD THIS LINE TO DISABLE DEFAULT MAPPINGS ***
-      create_default_mappings = false,
+      -- Note: Default mappings are enabled (create_default_mappings = true is default).
+      -- This causes a slight delay on <leader>gc / <leader>gb due to overlap
+      -- with mappings like gcc, gco, gbc, etc. (visible in :checkhealth which-key).
+      -- This delay is usually acceptable. To remove the delay and the extra
+      -- default mappings, add the following line inside this setup table:
+      -- create_default_mappings = false,
 
     }, opts or {})) -- Merge with any opts defined above
 
-    -- Your custom mappings remain active
+    -- Define custom keymaps
     local map = vim.keymap.set
+
+    -- Linewise comment toggle for Normal and Visual mode
     map({ 'n', 'v' }, '<leader>gc', function()
       require('Comment.api').toggle.linewise.current()
-    end, { desc = 'Toggle comment line (custom)' })
+    end, { desc = 'Toggle comment line' }) -- Simplified desc
 
-    map('v', '<leader>gc', function()
-       -- Need '<,'> for visual mode command correctly
-       vim.cmd("'<,'>CommentToggle")
-    end, { desc = 'Toggle comment selection (custom)' })
+    -- Ensure visual mode mapping uses visual selection context
+    -- Note: The above mapping might handle visual mode correctly with the API call.
+    -- If issues arise, this alternative targets the visual selection explicitly.
+    -- map('v', '<leader>gc', "<cmd>'<,'>CommentToggle<CR>", { desc = 'Toggle comment selection' })
 
-     -- You might want a block comment mapping too if you disable defaults
+     -- Custom block comment mapping
      map({ 'n', 'v' }, '<leader>gb', function()
        require('Comment.api').toggle.blockwise.current()
-     end, { desc = 'Toggle comment block (custom)' })
+     end, { desc = 'Toggle comment block' })
   end,
-  -- Optional: If you don't pass any other opts, you can remove the opts table
-  -- opts = {},
 }

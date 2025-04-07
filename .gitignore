@@ -1,28 +1,76 @@
-# Lazy.nvim generated files
+# --- Neovim Configuration .gitignore ---
+# Ignores temporary files, caches, logs, OS-specific files,
+# and potentially sensitive local data.
+
+# Lazy.nvim Package Manager
+# You might choose to commit lazy-lock.json if you want to lock plugin versions
+# across different machines precisely. Ignoring it means Lazy updates more freely.
 lazy-lock.json
 
-# Compiled Lua sources
-luac.out
-
-# Neovim temporary files
-*~
+# Neovim / Vim Swap & Backup Files
 *.swp
 *.swo
+*~
+*.bak # General backup files
 
-# Plugin directories
-# plugin/packer_compiled.lua
+# Neovim Session Files (if using :mksession)
+Session.vim
+Session*.vim
 
-# LSP data
-.luarc.json
+# Neovim Persistent Undo Directory
+# Note: Your config places this in stdpath('data')/undodir, which is typically
+# outside the config repo. Ignoring it here is safe but likely not essential
+# unless the path is overridden locally to be inside ~/.config/nvim.
+undodir/
 
-# Log files
+# Compiled Files (Lua, potentially others if plugins build things locally)
+luac.out
+*.o
+*.a
+*.so
+*.dll
+
+# Log Files
 *.log
+*.log.*
 
-# Cache directories
+# Cache & Plugin Data Directories (Common Names)
 .cache/
-.metals/
+cache/
+.nvim-lsp.log # Older nvim-lsp log file name
+coverage/ # Python coverage reports
 
-# OS generated files
+# Specific Tool/Plugin Data/Cache
+.metals/ # Metals Scala LSP workspace data
+.luarc.json # Lua LS config/cache
+.mypy_cache/ # MyPy type checker cache
+.ruff_cache/ # Ruff linter/formatter cache
+.pyright_cache/ # Pyright cache (if created locally)
+.telescope_history # Telescope search history
+
+# Python Virtual Environments (Should not be created inside ~/.config/nvim, but ignore just in case)
+venv/
+.venv/
+env/
+.env/
+*.pyc
+*.[oa] # Compiled object files (redundant with *.o/*.a above, but common)
+__pycache__/
+.pytest_cache/
+
+# Node.js Dependencies (If a plugin unexpectedly requires local install)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json # Often project-specific, ignore in general config repo
+yarn.lock # Often project-specific
+
+# Build Output Directories
+build/
+dist/
+
+# OS-generated Files (macOS, Windows, Linux)
 .DS_Store
 .DS_Store?
 ._*
@@ -30,17 +78,17 @@ luac.out
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Session files
-Session.vim
-Sessionx.vim
-
-# Undo directory
-undodir/
-
-# Telescope history
-.telescope_history
-
-# Local configuration files that might contain sensitive information
+# Potentially Sensitive Local Environment Files
+# IMPORTANT: Always ensure these are ignored!
 .env
 .envrc
+.env.*
+!.env.example # Example files are usually okay to commit
+
+# IDE/Editor Specific Config/State (usually not needed for Neovim config repo itself)
+# .idea/
+# .vscode/
+
+# --- End of .gitignore ---
