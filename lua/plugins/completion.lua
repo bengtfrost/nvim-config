@@ -1,148 +1,152 @@
 -- lua/plugins/completion.lua
 return {
+  -- Completion Engine (nvim-cmp)
   {
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter', -- Load when entering insert mode
+    event = 'InsertEnter', -- Load plugin once Insert mode is entered
     dependencies = {
-      'hrsh7th/cmp-nvim-lsp',       -- Source for LSP completions
-      'hrsh7th/cmp-buffer',       -- Source for buffer words
-      'hrsh7th/cmp-path',         -- Source for file system paths
-      -- Snippet Engine & Source (Choose one pair)
-      -- Option 1: vsnip (your current choice)
-      'hrsh7th/vim-vsnip',          -- Snippet engine
-      'hrsh7th/cmp-vsnip',          -- cmp source for vsnip
+      -- Sources for nvim-cmp
+      'hrsh7th/cmp-nvim-lsp',       -- LSP completions
+      'hrsh7th/cmp-buffer',       -- Buffer text completions
+      'hrsh7th/cmp-path',         -- Filesystem path completions
 
-      -- Option 2: LuaSnip (more modern, Lua-based)
-      -- 'L3MON4D3/LuaSnip',
-      -- 'saadparwaiz1/cmp_luasnip',
-      -- Optional: Add snippets
-      -- 'rafamadriz/friendly-snippets', -- Requires luasnip
+      -- Snippet Engine & Source: LuaSnip
+      {
+        'L3MON4D3/LuaSnip',
+        -- Follow latest release.
+        version = "v2.*", -- Replace <CurrentMajor> by the latest major version.
+        -- Build step is recommended for regex support in VS Code snippets. Requires 'make'.
+        build = "make install_jsregexp",
+        dependencies = {
+           -- Optional: Load common snippets (recommended)
+          'rafamadriz/friendly-snippets',
+        }
+      },
+      'saadparwaiz1/cmp_luasnip',     -- Bridges nvim-cmp and LuaSnip
+
+      -- NOTE: Removed 'hrsh7th/vim-vsnip' and 'hrsh7th/cmp-vsnip'
     },
     config = function()
       local cmp = require('cmp')
+      local luasnip = require('luasnip') -- Required for snippet expansion and jumping
+
+      -- Optional: Load snippets from friendly-snippets
+      -- Check if the loader exists before calling (good practice)
+      if pcall(require, "luasnip.loaders.from_vscode") then
+         require("luasnip.loaders.from_vscode").lazy_load()
+      end
+
+      -- Custom comparison function for sorting: put snippets on top
       local compare = require('cmp.config.compare')
-      -- Optional: If using LuaSnip, uncomment the line below
-      -- local luasnip = require('luasnip')
-      -- Optional: Load snippets if using LuaSnip + friendly-snippets
-      -- require('luasnip.loaders.from_vscode').lazy_load()
 
       cmp.setup({
+        -- Enable snippet features
         snippet = {
-          -- Choose the expand function for your snippet engine
-          -- For vsnip:
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            -- Use LuaSnip's expand function
+            luasnip.lsp_expand(args.body)
           end,
-          -- For LuaSnip:
-          -- expand = function(args)
-          --   luasnip.lsp_expand(args.body)
-          -- end,
         },
+
+        -- Key mappings for completion
         mapping = cmp.mapping.preset.insert({
           ['<C-k>'] = cmp.mapping.select_prev_item(), -- Previous item
           ['<C-j>'] = cmp.mapping.select_next_item(), -- Next item
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),      -- Scroll docs up
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),       -- Scroll docs down
           ['<C-Space>'] = cmp.mapping.complete(),      -- Trigger completion
-          ['<C-e>'] = cmp.mapping.abort(),           -- Close completion
+          ['<C-e>'] = cmp.mapping.abort(),           -- Close completion window
           ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Confirm selection
-          -- Additional useful mappings
+
+          -- Tab mapping: Navigate completion if open, jump snippets, or fallback
           ['<Tab>'] = cmp.mapping(function(fallback)
-             if cmp.visible() then
-               cmp.select_next_item()
-             -- Uncomment if using LuaSnip and you want Tab to jump through snippets
-             -- elseif luasnip.expand_or_jumpable() then
-             --  luasnip.expand_or_jump()
-             else
-               fallback() -- Fallback to default Tab behavior
-             end
-          end, { "i", "s" }), -- i: insert mode, s: select mode (for snippets)
+            if cmp.visible() then
+              -- If completion menu is visible, select next item
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              -- If cursor is in a snippet jump point, jump to next point
+              luasnip.expand_or_jump()
+            else
+              -- Otherwise, fallback to default Tab behavior (e.g., indent)
+              fallback()
+            end
+          end, { "i", "s" }), -- Run in Insert and Select modes
+
+          -- Shift-Tab mapping: Navigate completion back, jump snippets back, or fallback
           ['<S-Tab>'] = cmp.mapping(function(fallback)
-             if cmp.visible() then
-               cmp.select_prev_item()
-             -- Uncomment if using LuaSnip
-             -- elseif luasnip.jumpable(-1) then
-             --  luasnip.jump(-1)
-             else
-               fallback() -- Fallback to default Shift-Tab behavior
-             end
-          end, { "i", "s" }),
+            if cmp.visible() then
+              -- If completion menu is visible, select previous item
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              -- If cursor is in a snippet jump point, jump to previous point
+              luasnip.jump(-1)
+            else
+              -- Otherwise, fallback to default Shift-Tab behavior
+              fallback()
+            end
+          end, { "i", "s" }), -- Run in Insert and Select modes
         }),
+
+        -- Sources for completion candidates
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
-          -- Choose the snippet source matching your engine
-          { name = 'vsnip' },
-          -- { name = 'luasnip' },
-          { name = 'path' }, -- Add path source
+          { name = 'luasnip' }, -- Use luasnip source
+          { name = 'path' },
         }, {
-          { name = 'buffer', keyword_length = 5 }, -- Only show buffer words longer than 5 chars
+          { name = 'buffer', keyword_length = 5 }, -- Source from current buffer (longer words)
         }),
-        -- Optional: Configure appearance (requires a nerd font for icons)
+
+        -- Configure appearance (Optional, requires Nerd Font for icons)
         formatting = {
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
-            -- Define icons for different completion kinds (requires nvim-web-devicons or similar)
+            -- Define icons for different completion kinds
             local kind_icons = {
-              Text = "",
-              Method = "󰆧",
-              Function = "󰊕",
-              Constructor = "",
-              Field = "󰇽",
-              Variable = "󰂡",
-              Class = "󰠱",
-              Interface = "",
-              Module = "",
-              Property = "󰜢",
-              Unit = "",
-              Value = "󰎠",
-              Enum = "",
-              Keyword = "󰌋",
-              Snippet = "",
-              Color = "󰏘",
-              File = "󰈙",
-              Reference = "",
-              Folder = "󰉋",
-              EnumMember = "",
-              Constant = "󰏿",
-              Struct = "",
-              Event = "",
-              Operator = "󰆕",
-              TypeParameter = "󰅲",
+              Text = "", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽",
+              Variable = "󰂡", Class = "󰠱", Interface = "", Module = "", Property = "󰜢",
+              Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "",
+              Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "",
+              Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲",
             }
+            -- Add icon to the completion item kind
             vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind] or '?', vim_item.kind)
+            -- Add source menu name (useful for debugging)
             vim_item.menu = ({
               nvim_lsp = "[LSP]",
-              -- luasnip = "[Snippet]",
-              vsnip = "[Snippet]",
+              luasnip = "[Snippet]", -- Updated source name
               buffer = "[Buffer]",
               path = "[Path]",
             })[entry.source.name]
             return vim_item
           end,
         },
-         -- Optional: Better sorting
-        sorting = {
-          comparators = {
-            compare.offset,
-            compare.exact,
-            compare.score,
-            compare.recently_used,
-            compare.kind,
-            compare.sort_text,
-            compare.length,
-            compare.order,
-          },
-        },
-        -- Optional: Enable border for completion menu
+
+        -- Configure completion window appearance (Optional)
         window = {
            completion = cmp.config.window.bordered(),
            documentation = cmp.config.window.bordered(),
         },
-      })
-    end,
+
+        -- Configure sorting behavior (Optional)
+        sorting = {
+          comparators = {
+            compare.offset, compare.exact, compare.score,
+            -- Put snippets higher in the list
+            compare.kind, -- Sort by kind (snippets usually grouped)
+            compare.sort_text, compare.length, compare.order,
+            compare.recently_used, -- Add recently_used comparator
+          }
+        }
+      }) -- End of cmp.setup
+    end, -- End of config function
+  }, -- End of nvim-cmp plugin spec
+
+  -- LuaSnip engine definition (defined here so lazy.nvim manages it)
+  -- Note: Dependencies were listed under nvim-cmp, this is just for clarity
+  -- If you prefer, you can remove the spec below and just keep it in nvim-cmp's dependencies
+  {
+    'L3MON4D3/LuaSnip',
+    -- Ensure this is loaded when completion is needed or snippets are used
+    -- No specific event needed if it's a dependency of cmp which loads on InsertEnter
   },
-  -- Include the snippet engine chosen above
-  { 'hrsh7th/vim-vsnip', event = 'InsertEnter' },
-  -- Or if using LuaSnip
-  -- { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp', dependencies = { "rafamadriz/friendly-snippets" } },
-}
+} -- End of return table
