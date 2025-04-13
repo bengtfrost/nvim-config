@@ -36,7 +36,7 @@ return {
 
       -- Configure format on save behavior
       format_on_save = {
-        timeout_ms = 500,
+        timeout_ms = 1000, -- Increased to 1000ms (1 second)
         lsp_fallback = "always", -- Fallback to LSP if conform formatter fails
       },
 
