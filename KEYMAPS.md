@@ -57,6 +57,12 @@ This document summarizes the primary keybindings configured in this Neovim setup
 
 ## II. Plugin Key Mappings
 
+### Formatting (Conform)
+
+| Key         | Mode           | Action                       | Defined In             |
+| :---------- | :------------- | :--------------------------- | :--------------------- |
+| **`<leader>fd`** | Normal, Visual | **Format Document/Selection** | **`plugins/formatter.lua`** |
+
 ### Language Server Protocol (LSP) - Contextual
 
 *(These generally only work when an LSP server is attached to the current buffer)*
@@ -72,7 +78,7 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | `<leader>k` | Normal         | Show Signature Help            | `plugins/lsp.lua` |
 | `<leader>rn`| Normal         | Rename Symbol                  | `plugins/lsp.lua` |
 | `<leader>ca`| Normal, Visual | Code Actions                   | `plugins/lsp.lua` |
-| `<leader>lf`| Normal         | Format Document (LSP Format)   | `plugins/lsp.lua` |
+| `<leader>lf`| Normal, Visual | LSP Formatting (Disabled by default, use Conform) | `plugins/lsp.lua` |
 | `<leader>wa`| Normal         | Workspace: Add Folder          | `plugins/lsp.lua` |
 | `<leader>wr`| Normal         | Workspace: Remove Folder       | `plugins/lsp.lua` |
 | `<leader>wl`| Normal         | Workspace: List Folders        | `plugins/lsp.lua` |
@@ -91,7 +97,7 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | `<leader>fh`| Normal | Find Help Tags          | `plugins/telescope.lua` |
 | `<leader>fo`| Normal | Find Old Files          | `plugins/telescope.lua` |
 | `<leader>fr`| Normal | Resume Last Search      | `plugins/telescope.lua` |
-| `<leader>fd`| Normal | Find Diagnostics        | `plugins/telescope.lua` |
+| `<leader>fd`| Normal | Find Diagnostics        | `plugins/telescope.lua` | *(Note: Overlaps with Conform Format)* |
 
 ### NvimTree (File Explorer)
 
