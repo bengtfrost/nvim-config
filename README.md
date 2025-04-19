@@ -4,7 +4,7 @@
 [![Neovim](https://img.shields.io/badge/Neovim-0.11+-57A143?style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-This repository contains my personal Neovim configuration files, built with Lua and optimized for development workflows on Linux (specifically tested on Fedora with Sway/Foot). It aims for a balance between features, performance, and maintainability using modern Neovim plugins and practices.
+This repository contains my personal Neovim configuration files, built with Lua and optimized for development workflows on Linux (specifically tested on Fedora with Sway/Foot). It aims for a balance between features, performance, and maintainability using modern Neovim plugins and practices, **including configuration for `molten-nvim` to enable direct interaction with Jupyter kernels and `.ipynb` files within Neovim.**
 
 ## ✨ Features
 
@@ -17,7 +17,7 @@ This repository contains my personal Neovim configuration files, built with Lua 
 *   **🎨 Colorscheme:** Uses `EdenEast/nightfox.nvim` (`carbonfox` variant).
 *   **💡 Syntax Highlighting:** Enhanced syntax highlighting via `nvim-treesitter`.
 *   **⌨️ Keymap Guide:** `folke/which-key.nvim` provides helpful keybinding popups.
-*   **📓 Jupyter Integration:** Interact with Jupyter kernels and `.ipynb` files directly within Neovim using `benlubas/molten-nvim`. Supports connecting to kernels, viewing outputs, and executing code line-by-line or by selection from the raw `.ipynb` JSON view. *(New)*
+*   **📓 Jupyter Integration:** Interact with Jupyter kernels and `.ipynb` files directly within Neovim using `benlubas/molten-nvim`. Supports connecting to kernels, viewing outputs, and executing code line-by-line or by selection from the raw `.ipynb` JSON view.
 *   **🔧 Well-structured:** Modular configuration organized into logical directories (`core`, `plugins`).
 *   **⚙️ Sensible Defaults:** Optimized core Neovim settings for a better editing experience.
 *   **🐍 Python Ready:** Configured for Neovim's Python provider and `pyright` LSP.
@@ -105,7 +105,7 @@ This configuration follows a modular structure:
     *   `completion.lua`: Completion (`nvim-cmp`, `LuaSnip`).
     *   `formatter.lua`: Formatting (`conform.nvim`).
     *   `lsp.lua`: LSP setup (`nvim-lspconfig`, `mason.nvim`).
-    *   **`molten.lua`**: Jupyter integration (`molten-nvim`). *(New)*
+    *   `molten.lua`: Jupyter integration (`molten-nvim`).
     *   `telescope.lua`: Fuzzy finder (`telescope.nvim`).
     *   `treesitter.lua`: Syntax engine (`nvim-treesitter`).
     *   `ui.lua`: File explorer (`nvim-tree.lua`).
