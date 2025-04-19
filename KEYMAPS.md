@@ -78,7 +78,7 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | `<leader>k` | Normal         | Show Signature Help            | `plugins/lsp.lua` |
 | `<leader>rn`| Normal         | Rename Symbol                  | `plugins/lsp.lua` |
 | `<leader>ca`| Normal, Visual | Code Actions                   | `plugins/lsp.lua` |
-| `<leader>lf`| Normal, Visual | LSP Formatting (Disabled by default, use Conform) | `plugins/lsp.lua` |
+| `<leader>lf`| Normal, Visual | LSP Formatting (Disabled, use Conform) | `plugins/lsp.lua` |
 | `<leader>wa`| Normal         | Workspace: Add Folder          | `plugins/lsp.lua` |
 | `<leader>wr`| Normal         | Workspace: Remove Folder       | `plugins/lsp.lua` |
 | `<leader>wl`| Normal         | Workspace: List Folders        | `plugins/lsp.lua` |
@@ -123,7 +123,6 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | `R`         | Normal | Reload Tree                    | `plugins/ui.lua` (on_attach) |
 | `?`         | Normal | Toggle Help                    | `plugins/ui.lua` (on_attach) |
 | `q`         | Normal | Close NvimTree Window          | `plugins/ui.lua` (on_attach) |
-| *(Many other defaults exist - see `:help nvim-tree-mappings`)* | | |                  |
 
 ### Commenting (Comment.nvim)
 
@@ -131,7 +130,6 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | :---------- | :------------- | :----------------------- | :--------------------- |
 | `<leader>gc`| Normal, Visual | Toggle Line Comment      | `plugins/comment.lua`  |
 | `<leader>gb`| Normal, Visual | Toggle Block Comment     | `plugins/comment.lua`  |
-| *(Other `gcX`/`gbX` may exist if defaults enabled)* | | |                       |
 
 ### Completion (nvim-cmp)
 
@@ -145,6 +143,26 @@ This document summarizes the primary keybindings configured in this Neovim setup
 | `<C-e>`     | Insert | Abort Completion             | `plugins/completion.lua` |
 | `<CR>`      | Insert | Confirm Selection            | `plugins/completion.lua` |
 
+### Molten (Jupyter Integration)
+
+*(These keybindings interact with the Molten plugin for Jupyter kernels)*
+*(Note: Cell-based commands marked with (?) might not work reliably when viewing raw `.ipynb` JSON files. Line/Selection evaluation is preferred in that view.)*
+
+| Key         | Mode           | Action                           | Defined In            |
+| :---------- | :------------- | :------------------------------- | :-------------------- |
+| `<leader>ji`| Normal         | Molten: Initialize/Attach Kernel | `plugins/molten.lua`  |
+| `<leader>jca`| Normal         | Molten: Select Kernel            | `plugins/molten.lua`  |
+| `<leader>jl`| Normal         | Molten: Evaluate Line            | `plugins/molten.lua`  |
+| `<leader>js`| Visual         | Molten: Evaluate Selection       | `plugins/molten.lua`  |
+| `<leader>jr`| Normal         | Molten: Re-evaluate Cell (?)     | `plugins/molten.lua`  |
+| `<leader>jc`| Normal         | Molten: Evaluate Cell (?)        | `plugins/molten.lua`  |
+| `<leader>jj`| Normal         | Molten: Evaluate Cell & Next (?) | `plugins/molten.lua`  |
+| `<leader>jn`| Normal         | Molten: Next Cell (?)            | `plugins/molten.lua`  |
+| `<leader>jp`| Normal         | Molten: Previous Cell (?)        | `plugins/molten.lua`  |
+| `<leader>jo`| Normal         | Molten: Clear Cell Output        | `plugins/molten.lua`  |
+| `<leader>jk`| Normal         | Molten: Interrupt Kernel         | `plugins/molten.lua`  |
+| `<leader>jR`| Normal         | Molten: Restart Kernel           | `plugins/molten.lua`  |
+
 ## III. Which-Key Discovery
 
-*   Press `<leader>` (Space) in Normal Mode and **wait** briefly to see a popup listing available mappings starting with `<leader>`.
+*   Press `<leader>` (Space) in Normal Mode and **wait** briefly to see a popup listing available mappings starting with `<leader>`. Groups like `Molten`, `Telescope`, `LSP` help organize the display.
