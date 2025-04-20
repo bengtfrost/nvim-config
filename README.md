@@ -14,7 +14,7 @@ This repository contains my personal Neovim configuration files, built with Lua 
 *   **🤖 Completion:** Smooth completion experience powered by `nvim-cmp` and `LuaSnip`.
 *   **🌳 File Explorer:** Integrated file tree using `nvim-tree.lua`.
 *   **🔭 Fuzzy Finding:** Powerful fuzzy finding capabilities with `telescope.nvim`.
-*   **🎨 Colorscheme:** Uses `navarasu/onedark.nvim`.
+*   **🎨 Colorscheme:** Uses `olimorris/onedarkpro.nvim`.
 *   **💡 Syntax Highlighting:** Enhanced syntax highlighting via `nvim-treesitter`.
 *   **⌨️ Keymap Guide:** `folke/which-key.nvim` provides helpful keybinding popups.
 *   **📓 Jupyter Integration:** Interact with Jupyter kernels and `.ipynb` files directly within Neovim using `benlubas/molten-nvim`. Supports connecting to kernels, viewing outputs, and executing code line-by-line or by selection from the raw `.ipynb` JSON view.
@@ -88,7 +88,7 @@ This repository contains my personal Neovim configuration files, built with Lua 
     ```bash
     nvim
     ```
-    *   `lazy.nvim` will automatically bootstrap itself and install all the configured plugins on the first run.
+    *   `lazy.nvim` will automatically bootstrap itself and install/update all the configured plugins on the first run. Make sure you restart Neovim after the plugin updates are complete.
     *   **Molten Requirement:** After the first install of `molten-nvim` (or after updates), run `:UpdateRemotePlugins` inside Neovim and then **restart Neovim**.
     *   **Mason:** Mason will attempt to install LSPs and Formatters. If any fail, run `:Mason` after startup to manage them.
 
@@ -100,7 +100,7 @@ This configuration follows a modular structure:
 *   **`assets/`**: Static assets.
 *   **`lua/core/`**: Base Neovim settings (`options.lua`, `keymaps.lua`).
 *   **`lua/plugins/`**: Plugin configurations managed by `lazy.nvim`.
-    *   `colorscheme.lua`: Theme (`onedark.nvim`).
+    *   `colorscheme.lua`: Theme (`onedarkpro.nvim`).
     *   `comment.lua`: Commenting (`Comment.nvim`).
     *   `completion.lua`: Completion (`nvim-cmp`, `LuaSnip`).
     *   `formatter.lua`: Formatting (`conform.nvim`).
